@@ -10,12 +10,30 @@ import CameraPath from './CameraPath';
 
 export default function Scene() {
   // Interactive parameters via Leva
-  const { ambientIntensity, rotationSpeed, floatAmplitude, holoColor, bloomIntensity } = useControls({
+  const {
+    ambientIntensity,
+    rotationSpeed,
+    floatAmplitude,
+    holoColor,
+    bloomIntensity,
+    envPreset // new control for the environment preset
+  } = useControls({
     ambientIntensity: { value: 0.1, min: 0, max: 1, step: 0.05 },
     rotationSpeed: { value: 0.3, min: 0, max: 1, step: 0.05 },
     floatAmplitude: { value: 0.5, min: 0, max: 2, step: 0.1 },
     holoColor: { value: 'cyan' },
-    bloomIntensity: { value: 0.7, min: 0, max: 3, step: 0.1 }
+    bloomIntensity: { value: 0.7, min: 0, max: 3, step: 0.1 },
+    // Create a dropdown for environment presets
+    envPreset: {
+      value: 'night',
+      options: {
+        Night: 'night',
+        Sunset: 'sunset',
+        Studio: 'studio',
+        Forest: 'forest',
+        City: 'city'
+      }
+    }
   });
 
   return (
@@ -38,8 +56,8 @@ export default function Scene() {
         <ambientLight intensity={ambientIntensity} />
         <directionalLight position={[10, 10, 5]} intensity={1.2} castShadow />
 
-        {/* Environment background with stars */}
-        <Environment preset="sunset" background />
+        {/* Environment background with stars using a dynamic preset from Leva */}
+        <Environment preset={envPreset} background />
         <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade />
 
         {/* The animated spaceship */}
